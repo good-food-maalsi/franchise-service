@@ -1,0 +1,140 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum CommandStatus {
+  draft
+  confirmed
+  in_progress
+  delivered
+  canceled
+}
+
+model Franchise {
+  id         String   @id @default(uuid()) @db.Uuid
+  name       String   @db.VarChar(255)
+  latitude   Float    @db.DoublePrecision
+  longitude  Float    @db.DoublePrecision
+  street     String   @db.VarChar(255)
+  city       String   @db.VarChar(100)
+  state      String   @db.VarChar(50)
+  zip        String   @db.VarChar(10)
+  owner_id   String   @db.Uuid
+  email      String   @unique @db.VarChar(100)
+  phone      String   @db.VarChar(20)
+  created_at DateTime @default(now()) @db.Timestamp(6)
+  updated_at DateTime @updatedAt @db.Timestamp(6)
+
+  stocks   StockFranchise[]
+  commands Command[]
+
+  @@map("franchise")
+}
+
+model StockFranchise {
+  id            String   @id @default(uuid()) @db.Uuid
+  franchise_id  String   @db.Uuid
+  ingredient_id String   @db.Uuid
+  quantity      Int      @db.Integer
+  created_at    DateTime @default(now()) @db.Timestamp(6)
+  updated_at    DateTime @updatedAt @db.Timestamp(6)
+
+  franchise  Franchise  @relation(fields: [franchise_id], references: [id], onDelete: Cascade)
+  ingredient Ingredient @relation(fields: [ingredient_id], references: [id], onDelete: Cascade)
+
+  @@map("stock_franchise")
+}
+
+model Command {
+  id           String        @id @default(uuid()) @db.Uuid
+  franchise_id String        @db.Uuid
+  status       CommandStatus @default(draft)
+  user_id      String        @db.Uuid
+  created_at   DateTime      @default(now()) @db.Timestamp(6)
+  updated_at   DateTime      @updatedAt @db.Timestamp(6)
+
+  franchise           Franchise            @relation(fields: [franchise_id], references: [id], onDelete: Cascade)
+  command_ingredients CommandIngredient[]
+
+  @@map("command")
+}
+
+model CommandIngredient {
+  id            String   @id @default(uuid()) @db.Uuid
+  command_id    String   @db.Uuid
+  ingredient_id String   @db.Uuid
+  quantity      Int      @db.Integer
+  created_at    DateTime @default(now()) @db.Timestamp(6)
+  updated_at    DateTime @updatedAt @db.Timestamp(6)
+
+  command    Command    @relation(fields: [command_id], references: [id], onDelete: Cascade)
+  ingredient Ingredient @relation(fields: [ingredient_id], references: [id], onDelete: Cascade)
+
+  @@map("command_ingredient")
+}
+
+model Supplier {
+  id         String   @id @default(uuid()) @db.Uuid
+  name       String   @db.VarChar(255)
+  logo_url   String?  @db.VarChar(500)
+  latitude   Float?   @db.DoublePrecision
+  longitude  Float?   @db.DoublePrecision
+  phone      String   @db.VarChar(100)
+  email      String   @unique @db.VarChar(100)
+  created_at DateTime @default(now()) @db.Timestamp(6)
+  updated_at DateTime @updatedAt @db.Timestamp(6)
+
+  ingredients Ingredient[]
+
+  @@map("supplier")
+}
+
+model Ingredient {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String   @db.VarChar(255)
+  description String?  @db.VarChar(255)
+  supplier_id String   @db.Uuid
+  unit_price  Decimal  @db.Decimal(10, 2)
+  created_at  DateTime @default(now()) @db.Timestamp(6)
+  updated_at  DateTime @updatedAt @db.Timestamp(6)
+
+  supplier              Supplier              @relation(fields: [supplier_id], references: [id], onDelete: Cascade)
+  stocks                StockFranchise[]
+  command_ingredients   CommandIngredient[]
+  ingredient_categories IngredientCategory[]
+
+  @@map("ingredient")
+}
+
+model IngredientCategory {
+  id            String   @id @default(uuid()) @db.Uuid
+  ingredient_id String   @db.Uuid
+  category_id   String   @db.Uuid
+  created_at    DateTime @default(now()) @db.Timestamp(6)
+  updated_at    DateTime @updatedAt @db.Timestamp(6)
+
+  ingredient Ingredient @relation(fields: [ingredient_id], references: [id], onDelete: Cascade)
+  category   Category   @relation(fields: [category_id], references: [id], onDelete: Cascade)
+
+  @@map("ingredient_category")
+}
+
+model Category {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String   @db.VarChar(255)
+  description String?  @db.VarChar(255)
+  created_at  DateTime @default(now()) @db.Timestamp(6)
+  updated_at  DateTime @updatedAt @db.Timestamp(6)
+
+  ingredient_categories IngredientCategory[]
+
+  @@map("category")
+}

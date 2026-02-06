@@ -1,0 +1,48 @@
+version: "3.8"
+
+services:
+  franchise-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: franchise-service
+    ports:
+      - "3010:3010"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/franchise_db?schema=public
+      - PORT=3010
+      - NODE_ENV=production
+      - JWT_PUBLIC_KEY=${JWT_PUBLIC_KEY}
+      - DISABLE_AUTH=${DISABLE_AUTH:-false}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - good-food
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: franchise-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=franchise_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - good-food
+
+volumes:
+  postgres_data:
+
+networks:
+  good-food:
+    external: true
