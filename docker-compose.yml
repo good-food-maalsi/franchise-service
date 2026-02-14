@@ -7,25 +7,24 @@ services:
       dockerfile: Dockerfile
     container_name: franchise-service
     ports:
-      - "3010:3010"
+      - "4001:8080"
     environment:
-      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/franchise_db?schema=public
-      - PORT=3010
-      - NODE_ENV=production
+      - DATABASE_URL=postgresql://postgres:postgres@franchise-postgres:5432/franchise_db?schema=public
+      - PORT=8080
+      - NODE_ENV=development
       - JWT_PUBLIC_KEY=${JWT_PUBLIC_KEY}
-      - DISABLE_AUTH=${DISABLE_AUTH:-false}
     depends_on:
-      postgres:
+      franchise-postgres:
         condition: service_healthy
     networks:
       - good-food
     restart: unless-stopped
 
-  postgres:
+  franchise-postgres:
     image: postgres:16-alpine
     container_name: franchise-postgres
     ports:
-      - "5432:5432"
+      - "5433:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres

@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { z } from "zod";
 
 const envSchema = z.object({
@@ -7,10 +8,10 @@ const envSchema = z.object({
     .enum(["development", "production", "test"])
     .default("development"),
   JWT_PUBLIC_KEY: z.string().optional(),
-  DISABLE_AUTH: z
+  CORS_ORIGINS: z
     .string()
-    .transform((val) => val === "true")
-    .default(false),
+    .optional()
+    .transform((val) => (val ? val.split(",").map((s) => s.trim()) : [])),
 });
 
 const parsed = envSchema.safeParse(process.env);

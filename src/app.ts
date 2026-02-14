@@ -3,6 +3,7 @@ import cors from "cors";
 import helmet from "helmet";
 import compression from "compression";
 import morgan from "morgan";
+import cookieParser from "cookie-parser";
 import { env } from "./config/env.js";
 import { errorMiddleware } from "./middleware/error.middleware.js";
 import routes from "./routes/index.js";
@@ -11,16 +12,28 @@ const app: Application = express();
 
 // Security middlewares
 app.use(helmet());
+const defaultOrigins = [
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
+  "http://localhost:8080",
+  "http://127.0.0.1:8080",
+];
+const allowedOrigins = env.CORS_ORIGINS?.length
+  ? env.CORS_ORIGINS
+  : env.NODE_ENV === "production"
+    ? []
+    : defaultOrigins;
 app.use(
   cors({
-    origin: env.NODE_ENV === "production" ? false : "*",
+    origin: allowedOrigins.length ? allowedOrigins : true,
     credentials: true,
-  })
+  }),
 );
 
 // Request parsing
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 // Compression
 app.use(compression());

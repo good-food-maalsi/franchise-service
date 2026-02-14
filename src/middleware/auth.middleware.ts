@@ -24,25 +24,14 @@ export interface JWTPayload {
 export async function authMiddleware(
   req: Request,
   _res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> {
   try {
-    // Skip authentication if DISABLE_AUTH is set to "true"
-    if (env.DISABLE_AUTH) {
-      req.user = {
-        sub: "test-user",
-        email: "test@example.com",
-        role: "admin",
-        franchise_id: undefined,
-      };
-      return next();
-    }
-
-    // Get token from Authorization header
+    // Get token from Authorization header OR cookies
     const authHeader = req.headers.authorization;
     const token = authHeader?.startsWith("Bearer ")
       ? authHeader.slice(7)
-      : null;
+      : req.cookies?.accessToken || null;
 
     if (!token) {
       throw new UnauthorizedError("No access token provided");
@@ -59,11 +48,28 @@ export async function authMiddleware(
     // Verify and decode token
     const { payload } = await jwtVerify(token, publicKey);
 
+    // Normalize role: auth-service stores an array of Prisma UserRole objects
+    const roleRaw = payload.role;
+    let normalizedRole: string | undefined;
+    if (Array.isArray(roleRaw)) {
+      const first = (roleRaw as Record<string, unknown>[])[0];
+      const roleStr =
+        (first?.role as Record<string, unknown>)?.role ?? first?.role;
+      if (typeof roleStr === "string") normalizedRole = roleStr.toLowerCase();
+    } else if (typeof roleRaw === "string") {
+      normalizedRole = roleRaw.toLowerCase();
+    }
+
+    // Normalize franchise_id: auth-service uses camelCase "franchiseId"
+    const franchiseId =
+      (payload.franchise_id as string | undefined) ??
+      ((payload as Record<string, unknown>).franchiseId as string | undefined);
+
     req.user = {
       sub: payload.sub as string,
       email: payload.email as string,
-      role: payload.role as string | undefined,
-      franchise_id: payload.franchise_id as string | undefined,
+      role: normalizedRole,
+      franchise_id: franchiseId,
       iat: payload.iat,
       exp: payload.exp,
     };
@@ -89,7 +95,7 @@ export async function authMiddleware(
 export async function optionalAuthMiddleware(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> {
   try {
     await authMiddleware(req, res, (error) => {

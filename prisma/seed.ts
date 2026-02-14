@@ -22,23 +22,34 @@ const prisma = new PrismaClient({
 async function main() {
   console.log("🌱 Starting seed...");
 
-  // Create a demo franchise
-  const franchise = await prisma.franchise.create({
-    data: {
-      name: "Franchise Demo Paris",
-      latitude: 48.8566,
-      longitude: 2.3522,
-      street: "123 Rue de la Demo",
-      city: "Paris",
-      state: "Île-de-France",
-      zip: "75001",
-      owner_id: "00000000-0000-0000-0000-000000000001",
-      email: "demo@franchise.com",
-      phone: "+33 1 23 45 67 89",
-    },
+  const franchiseId = process.env.SEED_FRANCHISE_ID;
+  if (!franchiseId) {
+    throw new Error(
+      "SEED_FRANCHISE_ID must be set. Run: ./scripts/seed-dev.sh from project root"
+    );
+  }
+
+  // Create or update demo franchise with specific ID (to link with auth-service users)
+  const franchiseData = {
+    name: "Franchise Demo Paris",
+    latitude: 48.8566,
+    longitude: 2.3522,
+    street: "123 Rue de la Demo",
+    city: "Paris",
+    state: "Île-de-France",
+    zip: "75001",
+    owner_id: "00000000-0000-0000-0000-000000000001",
+    email: "demo@franchise.com",
+    phone: "+33 1 23 45 67 89",
+  };
+
+  const franchise = await prisma.franchise.upsert({
+    where: { id: franchiseId },
+    create: { id: franchiseId, ...franchiseData },
+    update: franchiseData,
   });
 
-  console.log("✅ Franchise created:", franchise.id);
+  console.log("✅ Franchise created/updated:", franchise.id);
 
   // Create suppliers
   const supplier1 = await prisma.supplier.create({

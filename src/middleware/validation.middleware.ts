@@ -11,7 +11,11 @@ export function validate(schema: ZodSchema, target: ValidationTarget = "body") {
   return (req: Request, _res: Response, next: NextFunction) => {
     try {
       const data = schema.parse(req[target]);
-      req[target] = data;
+      if (target === "query" || target === "params") {
+        Object.defineProperty(req, target, { value: data, writable: true, configurable: true });
+      } else {
+        req[target] = data;
+      }
       next();
     } catch (error) {
       next(error);
