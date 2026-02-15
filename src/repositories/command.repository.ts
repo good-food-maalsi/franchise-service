@@ -7,7 +7,7 @@ import type {
   CommandItem,
   AddIngredientToCommandInput,
   UpdateCommandIngredientInput,
-} from "../validators/command.validator.js";
+} from "@good-food-maalsi/contracts/franchise";
 import { CommandStatus } from "../generated/prisma/client.js";
 
 /** Payload for create: franchise_id required (resolved by route). */
@@ -80,12 +80,10 @@ export const commandRepository = {
 
     return {
       data: commands,
-      meta: {
-        total,
-        page,
-        limit,
-        totalPages: Math.ceil(total / limit),
-      },
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
     };
   },
 
@@ -273,7 +271,7 @@ export const commandRepository = {
   async updateIngredientQuantity(
     commandId: string,
     ingredientId: string,
-    data: UpdateCommandIngredientInput
+    data: UpdateCommandIngredientInput,
   ) {
     const commandIngredient = await prisma.commandIngredient.findFirst({
       where: {

@@ -4,7 +4,7 @@ import type {
   CreateCategoryInput,
   UpdateCategoryInput,
   CategoryQueryParams,
-} from "../validators/category.validator.js";
+} from "@good-food-maalsi/contracts/franchise";
 
 export const categoryRepository = {
   /**
@@ -43,12 +43,10 @@ export const categoryRepository = {
 
     return {
       data: categories,
-      meta: {
-        total,
-        page,
-        limit,
-        totalPages: Math.ceil(total / limit),
-      },
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
     };
   },
 

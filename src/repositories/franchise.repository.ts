@@ -4,7 +4,7 @@ import type {
   CreateFranchiseInput,
   UpdateFranchiseInput,
   FranchiseQueryParams,
-} from "../validators/franchise.validator.js";
+} from "@good-food-maalsi/contracts/franchise";
 
 export const franchiseRepository = {
   /**
@@ -53,12 +53,10 @@ export const franchiseRepository = {
 
     return {
       data: franchises,
-      meta: {
-        total,
-        page,
-        limit,
-        totalPages: Math.ceil(total / limit),
-      },
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
     };
   },
 
@@ -163,7 +161,7 @@ export const franchiseRepository = {
   async upsertStock(
     franchiseId: string,
     ingredientId: string,
-    quantity: number
+    quantity: number,
   ) {
     // Check if stock entry exists
     const existingStock = await prisma.stockFranchise.findFirst({
@@ -211,7 +209,7 @@ export const franchiseRepository = {
   async updateStockQuantity(
     franchiseId: string,
     ingredientId: string,
-    quantity: number
+    quantity: number,
   ) {
     const stock = await prisma.stockFranchise.findFirst({
       where: {

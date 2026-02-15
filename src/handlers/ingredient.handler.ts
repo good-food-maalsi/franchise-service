@@ -6,7 +6,7 @@ import type {
   UpdateIngredientInput,
   IngredientQueryParams,
   AddCategoriesToIngredientInput,
-} from "../validators/ingredient.validator.js";
+} from "@good-food-maalsi/contracts/franchise";
 import { NotFoundError, BadRequestError } from "../errors/api-error.js";
 import { ensureExists } from "../utils/validators.js";
 
@@ -49,8 +49,8 @@ export const ingredientHandler = {
       if (categoryIds.length > 0) {
         await Promise.all(
           categoryIds.map((id) =>
-            ensureExists(categoryRepository, id, "Category")
-          )
+            ensureExists(categoryRepository, id, "Category"),
+          ),
         );
       }
 
@@ -58,7 +58,7 @@ export const ingredientHandler = {
       for (const cat of data.categories) {
         if (!cat.id && (!cat.name || cat.name.trim().length < 2)) {
           throw new BadRequestError(
-            "Category name must be at least 2 characters"
+            "Category name must be at least 2 characters",
           );
         }
       }
@@ -77,7 +77,7 @@ export const ingredientHandler = {
 
     if (data.supplier_id) {
       checks.push(
-        ensureExists(supplierRepository, data.supplier_id, "Supplier")
+        ensureExists(supplierRepository, data.supplier_id, "Supplier"),
       );
     }
 
@@ -111,7 +111,7 @@ export const ingredientHandler = {
    */
   async addCategoriesToIngredient(
     ingredientId: string,
-    data: AddCategoriesToIngredientInput
+    data: AddCategoriesToIngredientInput,
   ) {
     // Check if ingredient exists
     await ensureExists(ingredientRepository, ingredientId, "Ingredient");
@@ -125,8 +125,8 @@ export const ingredientHandler = {
     if (categoryIds.length > 0) {
       await Promise.all(
         categoryIds.map((id) =>
-          ensureExists(categoryRepository, id, "Category")
-        )
+          ensureExists(categoryRepository, id, "Category"),
+        ),
       );
     }
 
@@ -134,7 +134,7 @@ export const ingredientHandler = {
     for (const cat of data.categories) {
       if (!cat.id && (!cat.name || cat.name.trim().length < 2)) {
         throw new BadRequestError(
-          "Category name must be at least 2 characters"
+          "Category name must be at least 2 characters",
         );
       }
     }

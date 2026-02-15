@@ -13,8 +13,11 @@ services:
       - PORT=8080
       - NODE_ENV=development
       - JWT_PUBLIC_KEY=${JWT_PUBLIC_KEY}
+      - RABBITMQ_URL=amqp://admin:password@rabbitmq:5672
     depends_on:
       franchise-postgres:
+        condition: service_healthy
+      rabbitmq:
         condition: service_healthy
     networks:
       - good-food

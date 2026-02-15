@@ -5,9 +5,11 @@ import type {
   CreateStockFranchiseInput,
   UpdateStockFranchiseInput,
   StockFranchiseQueryParams,
-} from "../validators/stock-franchise.validator.js";
+} from "@good-food-maalsi/contracts/franchise";
 import { NotFoundError, ConflictError } from "../errors/api-error.js";
 import { ensureExists } from "../utils/validators.js";
+import { publishEvent } from "../messaging/rabbitmq.publisher.js";
+import type { StockDeletedEvent } from "@good-food-maalsi/contracts/events";
 
 export const stockFranchiseHandler = {
   async getStocks(params: StockFranchiseQueryParams) {
@@ -31,12 +33,12 @@ export const stockFranchiseHandler = {
     const existing =
       await stockFranchiseRepository.findByFranchiseAndIngredient(
         data.franchise_id!,
-        data.ingredient_id
+        data.ingredient_id,
       );
 
     if (existing) {
       throw new ConflictError(
-        "Stock already exists for this franchise and ingredient"
+        "Stock already exists for this franchise and ingredient",
       );
     }
 
@@ -49,8 +51,21 @@ export const stockFranchiseHandler = {
   },
 
   async deleteStock(id: string) {
-    await ensureExists(stockFranchiseRepository, id, "Stock");
+    const stock = await stockFranchiseRepository.findById(id);
+    if (!stock) {
+      throw new NotFoundError(`Stock with ID ${id} not found`);
+    }
     await stockFranchiseRepository.delete(id);
+
+    const event: StockDeletedEvent = {
+      stock_id: id,
+      franchise_id: stock.franchise_id,
+      timestamp: new Date().toISOString(),
+    };
+    publishEvent("stock.deleted", event).catch((err) =>
+      console.error("[RabbitMQ] stock.deleted publish failed:", err),
+    );
+
     return { message: "Stock deleted successfully" };
   },
 };

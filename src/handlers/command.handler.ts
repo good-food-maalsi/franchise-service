@@ -7,7 +7,7 @@ import type {
   CommandQueryParams,
   AddIngredientToCommandInput,
   UpdateCommandIngredientInput,
-} from "../validators/command.validator.js";
+} from "@good-food-maalsi/contracts/franchise";
 import { NotFoundError } from "../errors/api-error.js";
 import { ensureExists } from "../utils/validators.js";
 
@@ -38,7 +38,7 @@ export const commandHandler = {
    */
   async createCommand(
     data: CreateCommandInput,
-    context: { franchiseId: string }
+    context: { franchiseId: string },
   ) {
     const { franchiseId } = context;
     await ensureExists(franchiseRepository, franchiseId, "Franchise");
@@ -47,15 +47,15 @@ export const commandHandler = {
       const ingredientIds = data.items.map((item) => item.ingredient_id);
       await Promise.all(
         ingredientIds.map((id) =>
-          ensureExists(ingredientRepository, id, "Ingredient")
-        )
+          ensureExists(ingredientRepository, id, "Ingredient"),
+        ),
       );
     }
 
     const { items, ...rest } = data;
     return commandRepository.create(
       { ...rest, franchise_id: franchiseId },
-      items || []
+      items || [],
     );
   },
 
@@ -94,7 +94,7 @@ export const commandHandler = {
    */
   async addIngredientToCommand(
     commandId: string,
-    data: AddIngredientToCommandInput
+    data: AddIngredientToCommandInput,
   ) {
     // Check if command and ingredient exist in parallel
     await Promise.all([
@@ -111,7 +111,7 @@ export const commandHandler = {
   async updateCommandIngredient(
     commandId: string,
     ingredientId: string,
-    data: UpdateCommandIngredientInput
+    data: UpdateCommandIngredientInput,
   ) {
     // Check if command and ingredient exist in parallel
     await Promise.all([
@@ -122,12 +122,12 @@ export const commandHandler = {
     const result = await commandRepository.updateIngredientQuantity(
       commandId,
       ingredientId,
-      data
+      data,
     );
 
     if (!result) {
       throw new NotFoundError(
-        `Ingredient ${ingredientId} not found in command ${commandId}`
+        `Ingredient ${ingredientId} not found in command ${commandId}`,
       );
     }
 

@@ -59,7 +59,10 @@ describe("Command Handler", () => {
             _count: { command_ingredients: 0 },
           },
         ],
-        meta: { total: 1, page: 1, limit: 10, totalPages: 1 },
+        total: 1,
+        page: 1,
+        limit: 10,
+        totalPages: 1,
       };
 
       vi.mocked(commandRepository.findAll).mockResolvedValue(mockData);

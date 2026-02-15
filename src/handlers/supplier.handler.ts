@@ -3,7 +3,7 @@ import type {
   CreateSupplierInput,
   UpdateSupplierInput,
   SupplierQueryParams,
-} from "../validators/supplier.validator.js";
+} from "@good-food-maalsi/contracts/franchise";
 import { NotFoundError } from "../errors/api-error.js";
 import {
   validateGPSCoordinatesPair,
@@ -59,7 +59,7 @@ export const supplierHandler = {
         supplierRepository,
         data.email,
         id,
-        "supplier"
+        "supplier",
       );
     }
 

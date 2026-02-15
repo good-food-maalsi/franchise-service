@@ -8,12 +8,13 @@ import commandsRoutes from "./commands.routes.js";
 
 const router = Router();
 
-// Mount all routes
-router.use("/categories", categoriesRoutes);
-router.use("/ingredients", ingredientsRoutes);
-router.use("/suppliers", suppliersRoutes);
-router.use("/franchises", franchisesRoutes);
-router.use("/stocks", stocksRoutes);
-router.use("/commands", commandsRoutes);
+// Mount all routes without prefix: paths are already defined in the ts-rest contracts
+// (e.g. franchiseContract.suppliers.getAll has path '/suppliers')
+router.use(categoriesRoutes);
+router.use(ingredientsRoutes);
+router.use(suppliersRoutes);
+router.use(franchisesRoutes);
+router.use(stocksRoutes);
+router.use(commandsRoutes);
 
 export default router;

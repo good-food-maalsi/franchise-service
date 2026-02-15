@@ -31,7 +31,10 @@ describe("Category Handler", () => {
             _count: { ingredient_categories: 0 },
           },
         ],
-        meta: { total: 1, page: 1, limit: 10, totalPages: 1 },
+        total: 1,
+        page: 1,
+        limit: 10,
+        totalPages: 1,
       };
 
       vi.mocked(categoryRepository.findAll).mockResolvedValue(mockData);

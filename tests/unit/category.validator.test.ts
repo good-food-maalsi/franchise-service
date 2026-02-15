@@ -4,7 +4,7 @@ import {
   updateCategorySchema,
   categoryQuerySchema,
   categoryIdSchema,
-} from "../../src/validators/category.validator";
+} from "@good-food-maalsi/contracts/franchise";
 
 describe("Category Validators", () => {
   describe("createCategorySchema", () => {
@@ -171,4 +171,3 @@ describe("Category Validators", () => {
     });
   });
 });
-

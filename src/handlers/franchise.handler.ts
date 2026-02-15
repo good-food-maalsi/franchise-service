@@ -4,11 +4,9 @@ import type {
   CreateFranchiseInput,
   UpdateFranchiseInput,
   FranchiseQueryParams,
-} from "../validators/franchise.validator.js";
-import type {
   UpsertStockInput,
   UpdateStockQuantityInput,
-} from "../validators/stock.validator.js";
+} from "@good-food-maalsi/contracts/franchise";
 import { NotFoundError } from "../errors/api-error.js";
 import {
   validateGPSCoordinates,
@@ -64,7 +62,7 @@ export const franchiseHandler = {
         franchiseRepository,
         data.email,
         id,
-        "franchise"
+        "franchise",
       );
     }
 
@@ -120,7 +118,7 @@ export const franchiseHandler = {
     return franchiseRepository.upsertStock(
       franchiseId,
       data.ingredient_id,
-      data.quantity
+      data.quantity,
     );
   },
 
@@ -130,7 +128,7 @@ export const franchiseHandler = {
   async updateFranchiseStockQuantity(
     franchiseId: string,
     ingredientId: string,
-    data: UpdateStockQuantityInput
+    data: UpdateStockQuantityInput,
   ) {
     // Check if franchise and ingredient exist in parallel
     await Promise.all([
@@ -141,12 +139,12 @@ export const franchiseHandler = {
     const result = await franchiseRepository.updateStockQuantity(
       franchiseId,
       ingredientId,
-      data.quantity
+      data.quantity,
     );
 
     if (!result) {
       throw new NotFoundError(
-        `Stock entry for ingredient ${ingredientId} not found in franchise ${franchiseId}`
+        `Stock entry for ingredient ${ingredientId} not found in franchise ${franchiseId}`,
       );
     }
 

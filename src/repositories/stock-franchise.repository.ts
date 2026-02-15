@@ -3,7 +3,7 @@ import type {
   StockFranchiseQueryParams,
   CreateStockFranchiseInput,
   UpdateStockFranchiseInput,
-} from "../validators/stock-franchise.validator.js";
+} from "@good-food-maalsi/contracts/franchise";
 
 export const stockFranchiseRepository = {
   async findAll(params: StockFranchiseQueryParams) {
@@ -67,7 +67,7 @@ export const stockFranchiseRepository = {
 
   async findByFranchiseAndIngredient(
     franchiseId: string,
-    ingredientId: string
+    ingredientId: string,
   ) {
     return prisma.stockFranchise.findFirst({
       where: {

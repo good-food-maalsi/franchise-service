@@ -5,7 +5,7 @@ import type {
   UpdateIngredientInput,
   IngredientQueryParams,
   CategoryInput,
-} from "../validators/ingredient.validator.js";
+} from "@good-food-maalsi/contracts/franchise";
 
 export const ingredientRepository = {
   /**
@@ -69,12 +69,10 @@ export const ingredientRepository = {
 
     return {
       data: ingredients,
-      meta: {
-        total,
-        page,
-        limit,
-        totalPages: Math.ceil(total / limit),
-      },
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
     };
   },
 
@@ -106,7 +104,7 @@ export const ingredientRepository = {
    */
   async create(
     data: Omit<CreateIngredientInput, "categories">,
-    categories: CategoryInput[]
+    categories: CategoryInput[],
   ) {
     return prisma.$transaction(async (tx: Prisma.TransactionClient) => {
       // Create the ingredient

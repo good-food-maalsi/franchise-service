@@ -12,6 +12,7 @@ const envSchema = z.object({
     .string()
     .optional()
     .transform((val) => (val ? val.split(",").map((s) => s.trim()) : [])),
+  RABBITMQ_URL: z.string().url().default('amqp://admin:password@localhost:5672'),
 });
 
 const parsed = envSchema.safeParse(process.env);

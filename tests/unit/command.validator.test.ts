@@ -1,12 +1,12 @@
 import { describe, it, expect } from "vitest";
-import { CommandStatus } from "@/generated/prisma/client";
 import {
+  CommandStatus,
   createCommandSchema,
   updateCommandSchema,
   commandQuerySchema,
   addIngredientToCommandSchema,
   updateCommandIngredientSchema,
-} from "../../src/validators/command.validator";
+} from "@good-food-maalsi/contracts/franchise";
 
 describe("Command Validators", () => {
   describe("createCommandSchema", () => {
@@ -44,14 +44,15 @@ describe("Command Validators", () => {
       expect(result.status).toBe(CommandStatus.draft);
     });
 
-    it("should require at least one item", () => {
-      const invalidData = {
+    it("should allow empty items array", () => {
+      const validData = {
         franchise_id: "550e8400-e29b-41d4-a716-446655440000",
         user_id: "550e8400-e29b-41d4-a716-446655440001",
         items: [],
       };
 
-      expect(() => createCommandSchema.parse(invalidData)).toThrow();
+      const result = createCommandSchema.parse(validData);
+      expect(result.items).toHaveLength(0);
     });
 
     it("should reject invalid franchise_id", () => {
@@ -172,9 +173,7 @@ describe("Command Validators", () => {
       };
 
       const result = commandQuerySchema.parse(validQuery);
-      expect(result.franchise_id).toBe(
-        "550e8400-e29b-41d4-a716-446655440000"
-      );
+      expect(result.franchise_id).toBe("550e8400-e29b-41d4-a716-446655440000");
       expect(result.status).toBe(CommandStatus.confirmed);
       expect(result.user_id).toBe("550e8400-e29b-41d4-a716-446655440001");
     });
@@ -234,4 +233,3 @@ describe("Command Validators", () => {
     });
   });
 });
-

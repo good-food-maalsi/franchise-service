@@ -3,7 +3,7 @@ import type {
   CreateCategoryInput,
   UpdateCategoryInput,
   CategoryQueryParams,
-} from "../validators/category.validator.js";
+} from "@good-food-maalsi/contracts/franchise";
 import { NotFoundError } from "../errors/api-error.js";
 import {
   ensureExists,
@@ -55,7 +55,7 @@ export const categoryHandler = {
         categoryRepository,
         data.name,
         id,
-        "category"
+        "category",
       );
     }
 

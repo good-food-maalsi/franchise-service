@@ -3,7 +3,7 @@ import {
   upsertStockSchema,
   updateStockQuantitySchema,
   stockIdsSchema,
-} from "../../src/validators/stock.validator";
+} from "@good-food-maalsi/contracts/franchise";
 
 describe("Stock Validators", () => {
   describe("upsertStockSchema", () => {
@@ -15,9 +15,7 @@ describe("Stock Validators", () => {
 
       const result = upsertStockSchema.parse(validData);
       expect(result.quantity).toBe(50);
-      expect(result.ingredient_id).toBe(
-        "550e8400-e29b-41d4-a716-446655440000"
-      );
+      expect(result.ingredient_id).toBe("550e8400-e29b-41d4-a716-446655440000");
     });
 
     it("should accept zero quantity", () => {
@@ -62,7 +60,7 @@ describe("Stock Validators", () => {
       expect(() =>
         upsertStockSchema.parse({
           ingredient_id: "550e8400-e29b-41d4-a716-446655440000",
-        })
+        }),
       ).toThrow();
     });
   });
@@ -111,12 +109,8 @@ describe("Stock Validators", () => {
       };
 
       const result = stockIdsSchema.parse(validData);
-      expect(result.franchiseId).toBe(
-        "550e8400-e29b-41d4-a716-446655440000"
-      );
-      expect(result.ingredientId).toBe(
-        "550e8400-e29b-41d4-a716-446655440001"
-      );
+      expect(result.franchiseId).toBe("550e8400-e29b-41d4-a716-446655440000");
+      expect(result.ingredientId).toBe("550e8400-e29b-41d4-a716-446655440001");
     });
 
     it("should reject invalid franchiseId", () => {
@@ -141,14 +135,13 @@ describe("Stock Validators", () => {
       expect(() =>
         stockIdsSchema.parse({
           franchiseId: "550e8400-e29b-41d4-a716-446655440000",
-        })
+        }),
       ).toThrow();
       expect(() =>
         stockIdsSchema.parse({
           ingredientId: "550e8400-e29b-41d4-a716-446655440001",
-        })
+        }),
       ).toThrow();
     });
   });
 });
-

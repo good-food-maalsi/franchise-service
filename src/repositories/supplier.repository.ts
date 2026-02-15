@@ -4,7 +4,7 @@ import type {
   CreateSupplierInput,
   UpdateSupplierInput,
   SupplierQueryParams,
-} from "../validators/supplier.validator.js";
+} from "@good-food-maalsi/contracts/franchise";
 
 export const supplierRepository = {
   /**
@@ -44,12 +44,10 @@ export const supplierRepository = {
 
     return {
       data: suppliers,
-      meta: {
-        total,
-        page,
-        limit,
-        totalPages: Math.ceil(total / limit),
-      },
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
     };
   },
 

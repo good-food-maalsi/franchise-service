@@ -4,7 +4,7 @@ import {
   updateIngredientSchema,
   ingredientQuerySchema,
   addCategoriesToIngredientSchema,
-} from "../../src/validators/ingredient.validator";
+} from "@good-food-maalsi/contracts/franchise";
 
 describe("Ingredient Validators", () => {
   describe("createIngredientSchema", () => {
@@ -27,15 +27,13 @@ describe("Ingredient Validators", () => {
         name: "Poulet fermier",
         supplier_id: "550e8400-e29b-41d4-a716-446655440000",
         unit_price: 12.5,
-        categories: [
-          { id: "550e8400-e29b-41d4-a716-446655440001" },
-        ],
+        categories: [{ id: "550e8400-e29b-41d4-a716-446655440001" }],
       };
 
       const result = createIngredientSchema.parse(validData);
       expect(result.categories).toHaveLength(1);
       expect(result.categories[0].id).toBe(
-        "550e8400-e29b-41d4-a716-446655440001"
+        "550e8400-e29b-41d4-a716-446655440001",
       );
     });
 
@@ -44,9 +42,7 @@ describe("Ingredient Validators", () => {
         name: "Poulet fermier",
         supplier_id: "550e8400-e29b-41d4-a716-446655440000",
         unit_price: 12.5,
-        categories: [
-          { name: "Bio", description: "Produits biologiques" },
-        ],
+        categories: [{ name: "Bio", description: "Produits biologiques" }],
       };
 
       const result = createIngredientSchema.parse(validData);
@@ -100,9 +96,7 @@ describe("Ingredient Validators", () => {
         name: "Poulet fermier",
         supplier_id: "550e8400-e29b-41d4-a716-446655440000",
         unit_price: 12.5,
-        categories: [
-          { description: "Test" },
-        ],
+        categories: [{ description: "Test" }],
       };
 
       expect(() => createIngredientSchema.parse(invalidData)).toThrow();
@@ -146,12 +140,8 @@ describe("Ingredient Validators", () => {
 
       const result = ingredientQuerySchema.parse(validQuery);
       expect(result.search).toBe("poulet");
-      expect(result.supplier_id).toBe(
-        "550e8400-e29b-41d4-a716-446655440000"
-      );
-      expect(result.category_id).toBe(
-        "550e8400-e29b-41d4-a716-446655440001"
-      );
+      expect(result.supplier_id).toBe("550e8400-e29b-41d4-a716-446655440000");
+      expect(result.category_id).toBe("550e8400-e29b-41d4-a716-446655440001");
     });
 
     it("should allow empty pagination params", () => {
@@ -187,7 +177,9 @@ describe("Ingredient Validators", () => {
         categories: [],
       };
 
-      expect(() => addCategoriesToIngredientSchema.parse(invalidData)).toThrow();
+      expect(() =>
+        addCategoriesToIngredientSchema.parse(invalidData),
+      ).toThrow();
     });
 
     it("should reject missing categories field", () => {
@@ -195,4 +187,3 @@ describe("Ingredient Validators", () => {
     });
   });
 });
-
