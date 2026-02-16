@@ -2,6 +2,7 @@ import { config } from "dotenv";
 import { PrismaClient } from "../src/generated/prisma/client.js";
 import { Pool } from "pg";
 import { PrismaPg } from "@prisma/adapter-pg";
+import { SEED_STOCK_IDS } from "./seed-constants.js";
 
 // Load environment variables
 config();
@@ -187,35 +188,46 @@ async function main() {
 
   console.log("✅ 5 Ingredients created with categories");
 
-  // Create stock entries for the franchise
-  await prisma.stockFranchise.createMany({
-    data: [
-      {
-        franchise_id: franchise.id,
-        ingredient_id: tomate.id,
-        quantity: 50,
-      },
-      {
-        franchise_id: franchise.id,
-        ingredient_id: salade.id,
-        quantity: 30,
-      },
-      {
-        franchise_id: franchise.id,
-        ingredient_id: boeuf.id,
-        quantity: 20,
-      },
-      {
-        franchise_id: franchise.id,
-        ingredient_id: poulet.id,
-        quantity: 25,
-      },
-      {
-        franchise_id: franchise.id,
-        ingredient_id: fromage.id,
-        quantity: 15,
-      },
-    ],
+  // Create one StockFranchise per ingredient (fixed ids for catalog seed reuse)
+  await prisma.stockFranchise.create({
+    data: {
+      id: SEED_STOCK_IDS.tomate,
+      franchise_id: franchise.id,
+      ingredient_id: tomate.id,
+      quantity: 50,
+    },
+  });
+  await prisma.stockFranchise.create({
+    data: {
+      id: SEED_STOCK_IDS.salade,
+      franchise_id: franchise.id,
+      ingredient_id: salade.id,
+      quantity: 30,
+    },
+  });
+  await prisma.stockFranchise.create({
+    data: {
+      id: SEED_STOCK_IDS.boeuf,
+      franchise_id: franchise.id,
+      ingredient_id: boeuf.id,
+      quantity: 20,
+    },
+  });
+  await prisma.stockFranchise.create({
+    data: {
+      id: SEED_STOCK_IDS.poulet,
+      franchise_id: franchise.id,
+      ingredient_id: poulet.id,
+      quantity: 25,
+    },
+  });
+  await prisma.stockFranchise.create({
+    data: {
+      id: SEED_STOCK_IDS.fromage,
+      franchise_id: franchise.id,
+      ingredient_id: fromage.id,
+      quantity: 15,
+    },
   });
 
   console.log("✅ 5 Stock entries created for the franchise");
