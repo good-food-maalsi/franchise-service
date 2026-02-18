@@ -4,6 +4,7 @@ import { franchiseContract } from "@good-food-maalsi/contracts/franchise";
 import { stockFranchiseHandler } from "../handlers/stock-franchise.handler.js";
 import { authMiddleware } from "../middleware/auth.middleware.js";
 import { BadRequestError } from "../errors/api-error.js";
+import { assertFranchiseAccess } from "../utils/authorization.js";
 
 const router = Router();
 
@@ -43,8 +44,9 @@ createExpressEndpoints(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return { status: 200 as const, body: result as any };
     },
-    getById: async ({ params }) => {
+    getById: async ({ params, req }) => {
       const stock = await stockFranchiseHandler.getStockById(params.id);
+      assertFranchiseAccess(stock.franchise_id, req.user);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return { status: 200 as const, body: stock as any };
     },
@@ -57,12 +59,16 @@ createExpressEndpoints(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return { status: 201 as const, body: stock as any };
     },
-    update: async ({ params, body }) => {
+    update: async ({ params, body, req }) => {
+      const existing = await stockFranchiseHandler.getStockById(params.id);
+      assertFranchiseAccess(existing.franchise_id, req.user);
       const stock = await stockFranchiseHandler.updateStock(params.id, body);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return { status: 200 as const, body: stock as any };
     },
-    delete: async ({ params }) => {
+    delete: async ({ params, req }) => {
+      const existing = await stockFranchiseHandler.getStockById(params.id);
+      assertFranchiseAccess(existing.franchise_id, req.user);
       await stockFranchiseHandler.deleteStock(params.id);
       return {
         status: 200 as const,

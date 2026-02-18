@@ -6,6 +6,7 @@ import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import { env } from "./config/env.js";
 import { errorMiddleware } from "./middleware/error.middleware.js";
+import { authMiddleware } from "./middleware/auth.middleware.js";
 import routes from "./routes/index.js";
 
 const app: Application = express();
@@ -50,6 +51,21 @@ app.get("/health", (_req, res) => {
     service: "franchise-service",
     timestamp: new Date().toISOString(),
   });
+});
+
+// Auth pour /franchises* sauf GET liste et GET détail (publics pour visiteurs)
+app.use((req, res, next) => {
+  const path = req.path || req.originalUrl?.split("?")[0] || "";
+  const isFranchisePath =
+    path === "/franchises" ||
+    path.startsWith("/franchises/");
+  const isPublicGet =
+    req.method === "GET" &&
+    (path === "/franchises" || /^\/franchises\/[^/]+$/.test(path));
+  if (isFranchisePath && !isPublicGet) {
+    return authMiddleware(req, res, next);
+  }
+  next();
 });
 
 // API routes

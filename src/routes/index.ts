@@ -8,12 +8,12 @@ import commandsRoutes from "./commands.routes.js";
 
 const router = Router();
 
-// Mount all routes without prefix: paths are already defined in the ts-rest contracts
-// (e.g. franchiseContract.suppliers.getAll has path '/suppliers')
+// Franchises en premier pour que GET /franchises et GET /franchises/:id (publics) soient traités
+// avant tout router protégé par auth (sinon 401 avant d’atteindre franchises)
+router.use(franchisesRoutes);
 router.use(categoriesRoutes);
 router.use(ingredientsRoutes);
 router.use(suppliersRoutes);
-router.use(franchisesRoutes);
 router.use(stocksRoutes);
 router.use(commandsRoutes);
 
