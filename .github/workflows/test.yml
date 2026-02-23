@@ -35,10 +35,10 @@ jobs:
               uses: actions/checkout@v4
               with:
                   repository: good-food-maalsi/good-food-contracts
-                  path: ../good-food-contracts
+                  path: good-food-contracts
 
-            - name: Install contracts dependencies
-              run: cd ../good-food-contracts && npm ci && npm run build
+            - name: Move contracts to parent dir and install dependencies
+              run: mv good-food-contracts ../good-food-contracts && cd ../good-food-contracts && npm ci && npm run build
 
             - uses: actions/setup-node@v4
               with:
