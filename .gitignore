@@ -31,3 +31,6 @@ coverage/
 
 # Misc
 *.tgz
+
+# Kubernetes secrets (applied manually, not via ArgoCD)
+k8s-secrets/

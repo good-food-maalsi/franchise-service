@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: franchise-service
+    labels:
+        app: franchise-service
+spec:
+    replicas: 1
+    revisionHistoryLimit: 3
+    selector:
+        matchLabels:
+            app: franchise-service
+    template:
+        metadata:
+            labels:
+                app: franchise-service
+        spec:
+            imagePullSecrets:
+                - name: scw-registry-secret
+            containers:
+                - name: franchise-service
+                  image: rg.fr-par.scw.cloud/good-food-container-registry/franchise-service:latest
+                  ports:
+                      - containerPort: 8080
+                  envFrom:
+                      - configMapRef:
+                            name: franchise-service-config
+                  resources:
+                      requests:
+                          memory: "128Mi"
+                          cpu: "100m"
+                      limits:
+                          memory: "256Mi"
+                          cpu: "250m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: franchise-service
+spec:
+    selector:
+        app: franchise-service
+    ports:
+        - protocol: TCP
+          port: 8080
+          targetPort: 8080
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: franchise-service-config
+data:
+    NODE_ENV: "production"
+    PORT: "8080"
