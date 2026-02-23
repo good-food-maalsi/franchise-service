@@ -5,10 +5,11 @@ COPY good-food-contracts /good-food-contracts
 WORKDIR /good-food-contracts
 RUN npm ci && npm run build
 
+# 2. Build the franchise-service
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm install ../good-food-contracts
-RUN npm ci
+# Use npm install to handle the local file link correctly
+RUN npm install
 COPY . .
 # Provide dummy DATABASE_URL for prisma generate during docker build
 ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"
