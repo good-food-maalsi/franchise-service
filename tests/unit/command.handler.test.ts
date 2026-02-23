@@ -4,7 +4,7 @@ import {
   createMockFranchise,
   createMockIngredient,
 } from "@/tests/helpers/factories";
-import { CommandStatus } from "@/generated/prisma/client";
+import { CommandStatus } from "@prisma/client";
 
 vi.mock("../../src/repositories/command.repository.js", () => ({
   commandRepository: {

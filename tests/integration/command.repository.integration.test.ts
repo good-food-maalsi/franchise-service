@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeAll, afterAll, beforeEach } from "vitest";
-import type { PrismaClient } from "@/generated/prisma/client";
-import { CommandStatus } from "@/generated/prisma/client";
+import type { PrismaClient } from "@prisma/client";
+import { CommandStatus } from "@prisma/client";
 import {
   connectTestDatabase,
   disconnectTestDatabase,
