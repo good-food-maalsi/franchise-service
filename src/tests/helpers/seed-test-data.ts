@@ -1,5 +1,5 @@
-import type { PrismaClient } from "@/generated/prisma/client";
-import { CommandStatus } from "@/generated/prisma/client";
+import type { PrismaClient } from "@prisma/client";
+import { CommandStatus } from "@prisma/client";
 
 /**
  * Seed minimal data for tests

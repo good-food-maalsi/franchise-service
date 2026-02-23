@@ -6,8 +6,8 @@ import type {
   Supplier,
   Franchise,
   CommandStatus,
-} from "@/generated/prisma/client";
-import { Prisma } from "@/generated/prisma/client";
+} from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
 /**
  * Factory functions pour créer des données de test
