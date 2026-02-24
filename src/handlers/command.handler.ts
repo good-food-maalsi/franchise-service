@@ -7,7 +7,7 @@ import type {
   CommandQueryParams,
   AddIngredientToCommandInput,
   UpdateCommandIngredientInput,
-} from "@good-food-maalsi/contracts/franchise";
+} from "@good-food/contracts/franchise";
 import { NotFoundError } from "../errors/api-error.js";
 import { ensureExists } from "../utils/validators.js";
 

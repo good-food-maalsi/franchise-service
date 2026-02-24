@@ -6,7 +6,7 @@ import type {
   UpdateIngredientInput,
   IngredientQueryParams,
   AddCategoriesToIngredientInput,
-} from "@good-food-maalsi/contracts/franchise";
+} from "@good-food/contracts/franchise";
 import { NotFoundError, BadRequestError } from "../errors/api-error.js";
 import { ensureExists } from "../utils/validators.js";
 

@@ -4,7 +4,7 @@ import type {
   CreateSupplierInput,
   UpdateSupplierInput,
   SupplierQueryParams,
-} from "@good-food-maalsi/contracts/franchise";
+} from "@good-food/contracts/franchise";
 
 export const supplierRepository = {
   /**

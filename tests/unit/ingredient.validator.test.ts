@@ -4,7 +4,7 @@ import {
   updateIngredientSchema,
   ingredientQuerySchema,
   addCategoriesToIngredientSchema,
-} from "@good-food-maalsi/contracts/franchise";
+} from "@good-food/contracts/franchise";
 
 describe("Ingredient Validators", () => {
   describe("createIngredientSchema", () => {

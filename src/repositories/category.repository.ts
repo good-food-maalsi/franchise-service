@@ -4,7 +4,7 @@ import type {
   CreateCategoryInput,
   UpdateCategoryInput,
   CategoryQueryParams,
-} from "@good-food-maalsi/contracts/franchise";
+} from "@good-food/contracts/franchise";
 
 export const categoryRepository = {
   /**

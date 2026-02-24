@@ -4,7 +4,7 @@ import {
   updateCategorySchema,
   categoryQuerySchema,
   categoryIdSchema,
-} from "@good-food-maalsi/contracts/franchise";
+} from "@good-food/contracts/franchise";
 
 describe("Category Validators", () => {
   describe("createCategorySchema", () => {

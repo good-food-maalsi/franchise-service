@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { createExpressEndpoints } from "@ts-rest/express";
-import { franchiseContract } from "@good-food-maalsi/contracts/franchise";
+import { franchiseContract } from "@good-food/contracts/franchise";
 import { stockFranchiseHandler } from "../handlers/stock-franchise.handler.js";
 import { authMiddleware } from "../middleware/auth.middleware.js";
 import { BadRequestError } from "../errors/api-error.js";

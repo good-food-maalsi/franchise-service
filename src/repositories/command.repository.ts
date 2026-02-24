@@ -7,7 +7,7 @@ import type {
   CommandItem,
   AddIngredientToCommandInput,
   UpdateCommandIngredientInput,
-} from "@good-food-maalsi/contracts/franchise";
+} from "@good-food/contracts/franchise";
 import { CommandStatus } from "@prisma/client";
 
 /** Payload for create: franchise_id required (resolved by route). */

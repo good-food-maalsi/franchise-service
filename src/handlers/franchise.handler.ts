@@ -6,7 +6,7 @@ import type {
   FranchiseQueryParams,
   UpsertStockInput,
   UpdateStockQuantityInput,
-} from "@good-food-maalsi/contracts/franchise";
+} from "@good-food/contracts/franchise";
 import { NotFoundError } from "../errors/api-error.js";
 import {
   validateGPSCoordinates,

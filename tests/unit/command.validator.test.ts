@@ -6,7 +6,7 @@ import {
   commandQuerySchema,
   addIngredientToCommandSchema,
   updateCommandIngredientSchema,
-} from "@good-food-maalsi/contracts/franchise";
+} from "@good-food/contracts/franchise";
 
 describe("Command Validators", () => {
   describe("createCommandSchema", () => {

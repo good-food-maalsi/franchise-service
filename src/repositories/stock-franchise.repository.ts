@@ -3,7 +3,7 @@ import type {
   StockFranchiseQueryParams,
   CreateStockFranchiseInput,
   UpdateStockFranchiseInput,
-} from "@good-food-maalsi/contracts/franchise";
+} from "@good-food/contracts/franchise";
 
 export const stockFranchiseRepository = {
   async findAll(params: StockFranchiseQueryParams) {

@@ -5,7 +5,7 @@ import type {
   UpdateIngredientInput,
   IngredientQueryParams,
   CategoryInput,
-} from "@good-food-maalsi/contracts/franchise";
+} from "@good-food/contracts/franchise";
 
 export const ingredientRepository = {
   /**

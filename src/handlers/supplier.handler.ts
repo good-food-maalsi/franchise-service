@@ -3,7 +3,7 @@ import type {
   CreateSupplierInput,
   UpdateSupplierInput,
   SupplierQueryParams,
-} from "@good-food-maalsi/contracts/franchise";
+} from "@good-food/contracts/franchise";
 import { NotFoundError } from "../errors/api-error.js";
 import {
   validateGPSCoordinatesPair,

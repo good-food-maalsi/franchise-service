@@ -4,7 +4,7 @@ import type {
   CreateFranchiseInput,
   UpdateFranchiseInput,
   FranchiseQueryParams,
-} from "@good-food-maalsi/contracts/franchise";
+} from "@good-food/contracts/franchise";
 
 export const franchiseRepository = {
   /**

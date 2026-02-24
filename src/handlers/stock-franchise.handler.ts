@@ -5,11 +5,11 @@ import type {
   CreateStockFranchiseInput,
   UpdateStockFranchiseInput,
   StockFranchiseQueryParams,
-} from "@good-food-maalsi/contracts/franchise";
+} from "@good-food/contracts/franchise";
 import { NotFoundError, ConflictError } from "../errors/api-error.js";
 import { ensureExists } from "../utils/validators.js";
 import { publishEvent } from "../messaging/rabbitmq.publisher.js";
-import type { StockDeletedEvent } from "@good-food-maalsi/contracts/events";
+import type { StockDeletedEvent } from "@good-food/contracts/events";
 
 export const stockFranchiseHandler = {
   async getStocks(params: StockFranchiseQueryParams) {

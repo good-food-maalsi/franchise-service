@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { createExpressEndpoints } from "@ts-rest/express";
-import { franchiseContract } from "@good-food-maalsi/contracts/franchise";
+import { franchiseContract } from "@good-food/contracts/franchise";
 import { franchiseHandler } from "../handlers/franchise.handler.js";
 import {
   assertAdmin,

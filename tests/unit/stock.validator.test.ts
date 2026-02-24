@@ -3,7 +3,7 @@ import {
   upsertStockSchema,
   updateStockQuantitySchema,
   stockIdsSchema,
-} from "@good-food-maalsi/contracts/franchise";
+} from "@good-food/contracts/franchise";
 
 describe("Stock Validators", () => {
   describe("upsertStockSchema", () => {

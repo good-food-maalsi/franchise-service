@@ -1,19 +1,10 @@
 # === Build Stage ===
 FROM node:22-alpine AS builder
 
-COPY good-food-contracts /good-food-contracts
-WORKDIR /good-food-contracts
-RUN npm ci && npm run build
-
-# 2. Build the franchise-service
+# 1. Build the franchise-service
 WORKDIR /app
 COPY package.json package-lock.json ./
-
-# Pack the contracts into a tarball and install it
-RUN cd /good-food-contracts && npm pack && mv good-food-maalsi-contracts-*.tgz /app/contracts.tgz
-RUN sed -i 's|"file:../good-food-contracts"|"file:./contracts.tgz"|g' package.json
-
-# Use npm install to handle the local file link correctly
+# Use npm install to grab dependencies from NPM
 RUN npm install
 COPY . .
 # Provide dummy DATABASE_URL for prisma generate during docker build
