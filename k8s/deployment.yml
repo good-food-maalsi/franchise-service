@@ -57,3 +57,4 @@ metadata:
 data:
     NODE_ENV: "production"
     PORT: "8080"
+    RABBITMQ_URL: "amqp://admin:password@rabbitmq:5672"
