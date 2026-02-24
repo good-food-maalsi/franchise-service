@@ -8,10 +8,10 @@ RUN npm ci && npm run build
 # 2. Build the franchise-service
 WORKDIR /app
 COPY package.json package-lock.json ./
-COPY --from=builder /good-food-contracts /app/good-food-contracts
 
-# Modify package.json to point to the internal copy of the contracts
-RUN sed -i 's|"file:../good-food-contracts"|"file:./good-food-contracts"|g' package.json
+# Pack the contracts into a tarball and install it
+RUN cd /good-food-contracts && npm pack && mv good-food-maalsi-contracts-*.tgz /app/contracts.tgz
+RUN sed -i 's|"file:../good-food-contracts"|"file:./contracts.tgz"|g' package.json
 
 # Use npm install to handle the local file link correctly
 RUN npm install
@@ -24,7 +24,6 @@ RUN npm run build
 # === Production Stage ===
 FROM node:22-alpine
 WORKDIR /app
-COPY --from=builder /good-food-contracts /good-food-contracts
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./
