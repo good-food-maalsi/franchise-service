@@ -8,6 +8,11 @@ RUN npm ci && npm run build
 # 2. Build the franchise-service
 WORKDIR /app
 COPY package.json package-lock.json ./
+COPY --from=builder /good-food-contracts /app/good-food-contracts
+
+# Modify package.json to point to the internal copy of the contracts
+RUN sed -i 's|"file:../good-food-contracts"|"file:./good-food-contracts"|g' package.json
+
 # Use npm install to handle the local file link correctly
 RUN npm install
 COPY . .
