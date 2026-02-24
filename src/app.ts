@@ -44,8 +44,8 @@ if (env.NODE_ENV !== "test") {
   app.use(morgan(env.NODE_ENV === "production" ? "combined" : "dev"));
 }
 
-// Health check endpoint
-app.get("/health", (_req, res) => {
+// Health check endpoint (sous le préfixe ingress /franchise)
+app.get("/franchise/health", (_req, res) => {
   res.status(200).json({
     status: "ok",
     service: "franchise-service",
@@ -53,23 +53,23 @@ app.get("/health", (_req, res) => {
   });
 });
 
-// Auth pour /franchises* sauf GET liste et GET détail (publics pour visiteurs)
+// Auth pour /franchise/franchises* sauf GET liste et GET détail (publics pour visiteurs)
 app.use((req, res, next) => {
   const path = req.path || req.originalUrl?.split("?")[0] || "";
   const isFranchisePath =
-    path === "/franchises" ||
-    path.startsWith("/franchises/");
+    path === "/franchise/franchises" ||
+    path.startsWith("/franchise/franchises/");
   const isPublicGet =
     req.method === "GET" &&
-    (path === "/franchises" || /^\/franchises\/[^/]+$/.test(path));
+    (path === "/franchise/franchises" || /^\/franchise\/franchises\/[^/]+$/.test(path));
   if (isFranchisePath && !isPublicGet) {
     return authMiddleware(req, res, next);
   }
   next();
 });
 
-// API routes
-app.use(routes);
+// API routes (préfixe /franchise pour correspondre à l'ingress)
+app.use("/franchise", routes);
 
 // Error handling middleware (must be last)
 app.use(errorMiddleware);
