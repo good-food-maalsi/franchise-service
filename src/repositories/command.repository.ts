@@ -1,5 +1,5 @@
 import { prisma } from "../config/database.js";
-import type { Prisma } from "../generated/prisma/client.js";
+import type { Prisma } from "@prisma/client";
 import type {
   CreateCommandInput,
   UpdateCommandInput,
@@ -8,7 +8,7 @@ import type {
   AddIngredientToCommandInput,
   UpdateCommandIngredientInput,
 } from "@good-food-maalsi/contracts/franchise";
-import { CommandStatus } from "../generated/prisma/client.js";
+import { CommandStatus } from "@prisma/client";
 
 /** Payload for create: franchise_id required (resolved by route). */
 type CreateCommandData = Omit<CreateCommandInput, "items"> & {

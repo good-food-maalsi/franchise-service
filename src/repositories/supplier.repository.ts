@@ -1,5 +1,5 @@
 import { prisma } from "../config/database.js";
-import type { Prisma } from "../generated/prisma/client.js";
+import type { Prisma } from "@prisma/client";
 import type {
   CreateSupplierInput,
   UpdateSupplierInput,
