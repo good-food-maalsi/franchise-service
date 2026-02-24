@@ -7,10 +7,10 @@ RUN npm ci && npm run build
 
 # 2. Build the franchise-service
 WORKDIR /app
-COPY franchise-service/package.json franchise-service/package-lock.json ./
+COPY package.json package-lock.json ./
 # Use npm install to handle the local file link correctly
 RUN npm install
-COPY franchise-service/. .
+COPY . .
 # Provide dummy DATABASE_URL for prisma generate during docker build
 ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"
 RUN npx prisma generate
