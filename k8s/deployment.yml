@@ -37,6 +37,8 @@ spec:
                             name: franchise-service-db-secret
                       - secretRef:
                             name: good-food-jwt-secret
+                      - secretRef:
+                            name: rabbitmq-secret
 ---
 apiVersion: v1
 kind: Service
@@ -57,4 +59,3 @@ metadata:
 data:
     NODE_ENV: "production"
     PORT: "8080"
-    RABBITMQ_URL: "amqp://admin:password@rabbitmq:5672"
