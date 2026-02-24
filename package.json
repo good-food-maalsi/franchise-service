@@ -21,7 +21,7 @@
     "db:test:down": "docker compose -f docker-compose.test.yml down -v"
   },
   "dependencies": {
-    "@good-food/contracts": "^1.1.5",
+    "@good-food/contracts": "^1.1.4",
     "@prisma/adapter-pg": "^7.4.0",
     "@prisma/client": "^7.4.0",
     "@ts-rest/core": "3.53.0-rc.1",
