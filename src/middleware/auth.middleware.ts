@@ -43,10 +43,21 @@ export async function authMiddleware(
             throw new UnauthorizedError("JWT public key not configured");
         }
 
-        const publicKey = await importSPKI(
-            decodeBase64Key(publicKeyStr),
-            "RS256",
-        );
+        // Auto-detect if base64 or raw PEM
+        const rawKey = publicKeyStr.trimStart();
+        const decodedKey = rawKey.startsWith("-----BEGIN")
+            ? rawKey
+            : decodeBase64Key(rawKey);
+
+        // Normalize PEM (remove extra whitespace/newlines from injected K8s secrets)
+        const body = decodedKey
+            .replace(/-----BEGIN PUBLIC KEY-----/g, "")
+            .replace(/-----END PUBLIC KEY-----/g, "")
+            .replace(/\s+/g, "");
+        const lines = body.match(/.{1,64}/g) ?? [];
+        const pem = `-----BEGIN PUBLIC KEY-----\n${lines.join("\n")}\n-----END PUBLIC KEY-----`;
+
+        const publicKey = await importSPKI(pem, "RS256");
 
         // Verify and decode token
         const { payload } = await jwtVerify(token, publicKey);
