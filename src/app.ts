@@ -14,21 +14,21 @@ const app: Application = express();
 // Security middlewares
 app.use(helmet());
 const defaultOrigins = [
-  "http://localhost:3000",
-  "http://127.0.0.1:3000",
-  "http://localhost:8080",
-  "http://127.0.0.1:8080",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:8080",
+    "http://127.0.0.1:8080",
 ];
 const allowedOrigins = env.CORS_ORIGINS?.length
-  ? env.CORS_ORIGINS
-  : env.NODE_ENV === "production"
-    ? []
-    : defaultOrigins;
+    ? env.CORS_ORIGINS
+    : env.NODE_ENV === "production"
+      ? []
+      : defaultOrigins;
 app.use(
-  cors({
-    origin: allowedOrigins.length ? allowedOrigins : true,
-    credentials: true,
-  }),
+    cors({
+        origin: allowedOrigins.length ? allowedOrigins : true,
+        credentials: true,
+    }),
 );
 
 // Request parsing
@@ -41,31 +41,36 @@ app.use(compression());
 
 // Logging
 if (env.NODE_ENV !== "test") {
-  app.use(morgan(env.NODE_ENV === "production" ? "combined" : "dev"));
+    app.use(morgan(env.NODE_ENV === "production" ? "combined" : "dev"));
 }
 
 // Health check endpoint (sous le préfixe ingress /franchise)
 app.get("/franchise/health", (_req, res) => {
-  res.status(200).json({
-    status: "ok",
-    service: "franchise-service",
-    timestamp: new Date().toISOString(),
-  });
+    res.status(200).json({
+        status: "ok",
+        service: "franchise-service",
+        timestamp: new Date().toISOString(),
+    });
 });
 
 // Auth pour /franchise/franchises* sauf GET liste et GET détail (publics pour visiteurs)
 app.use((req, res, next) => {
-  const path = req.path || req.originalUrl?.split("?")[0] || "";
-  const isFranchisePath =
-    path === "/franchise/franchises" ||
-    path.startsWith("/franchise/franchises/");
-  const isPublicGet =
-    req.method === "GET" &&
-    (path === "/franchise/franchises" || /^\/franchise\/franchises\/[^/]+$/.test(path));
-  if (isFranchisePath && !isPublicGet) {
-    return authMiddleware(req, res, next);
-  }
-  next();
+    const path = req.path || req.originalUrl?.split("?")[0] || "";
+    const isFranchisePath =
+        path === "/franchise/franchises" ||
+        path.startsWith("/franchise/franchises/");
+    const isPublicGet =
+        req.method === "GET" &&
+        (path === "/franchise/franchises" ||
+            /^\/franchise\/franchises\/[^/]+$/.test(path));
+    console.log(
+        `[AUTH-TRACE] Request path: '${path}', Method: '${req.method}', isFranchisePath: ${isFranchisePath}, isPublicGet: ${isPublicGet}`,
+    );
+    if (isFranchisePath && !isPublicGet) {
+        console.log(`[AUTH-TRACE] Calling authMiddleware for ${path}`);
+        return authMiddleware(req, res, next);
+    }
+    next();
 });
 
 // API routes (préfixe /franchise pour correspondre à l'ingress)
