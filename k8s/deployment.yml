@@ -19,7 +19,7 @@ spec:
                 - name: scw-registry-secret
             containers:
                 - name: franchise-service
-                  image: rg.fr-par.scw.cloud/good-food-container-registry/franchise-service:3b391b72dd588b2dc72f2bb0de04eb2037ae8663
+                  image: rg.fr-par.scw.cloud/good-food-container-registry/franchise-service:672ce39f37af408eb5c259a26beda61c537d31e5
                   imagePullPolicy: Always
                   ports:
                       - containerPort: 8080
